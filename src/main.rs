@@ -1,5 +1,5 @@
 pub mod config;
 
 fn main() {
-    config::read_config("bitcoin.conf");
+    config::read_config("chain.conf");
 }
