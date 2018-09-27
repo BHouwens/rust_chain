@@ -5,7 +5,7 @@ use std::io::{ BufRead, BufReader };
 
 // ---- FUNCTIONS ---- //
 
-pub fn read_config(path: &str) {
+pub fn read_config(path: &str) -> Config {
     let path = Path::new(path);
     let file = File::open(path).expect("Config file not found");
     let content = BufReader::new(&file);
@@ -72,7 +72,6 @@ pub fn read_config(path: &str) {
             "paytxfee" => { config.pay_tx_fee = value.parse::<f32>().unwrap(); },
             _ => println!("Property not catered to")
         }
-
     }
 
     config.general_neighbours = general_neighbours;
@@ -82,7 +81,7 @@ pub fn read_config(path: &str) {
         config.rpc_details = Some(rpc_details);
     }
     
-    println!("{:?}", config);
+    config
 }
 
 
