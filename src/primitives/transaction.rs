@@ -1,6 +1,5 @@
 use uint::U256;
 use primitives::SEQUENCE_FINAL;
-use primitives::script::Script;
 use utils::amount::is_valid_amount;
 
 /** 
@@ -31,9 +30,9 @@ impl OutPoint {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TxIn {
-    previous_out: Option<OutPoint>,
-    sequence: u32
-    script_signature: Option<Script>
+    pub previous_out: Option<OutPoint>,
+    pub sequence: u32
+    pub script_signature: Option<String>
 }
 
 impl TxIn {
@@ -44,12 +43,6 @@ impl TxIn {
             script_signature: None
         }
     }
-
-    // fn is_equal_to(&self, comparison: &TxIn) -> bool {
-    //     return if self.previous_out == comparison.previous_out && 
-    //               self.script_signature == comparison.script_signature &&
-    //               self.sequence == comparison.sequence;
-    // }
 }
 
 
@@ -61,7 +54,7 @@ impl TxIn {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TxOut {
     value: u64, // amount in satoshis (original bitcoin)
-    public_key: Option<Script>
+    public_key: Option<String>
 }
 
 impl TxOut {
@@ -81,10 +74,10 @@ impl TxOut {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Transaction {
-    inputs: Vec<TxIn>,
-    outputs: Vec<TxOut>,
-    version: i32,
-    lock_time: u32
+    pub inputs: Vec<TxIn>,
+    pub outputs: Vec<TxOut>,
+    pub version: i32,
+    pub lock_time: u32
 }
 
 impl Transaction {

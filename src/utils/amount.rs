@@ -19,7 +19,7 @@
  * and MAX_MONEY = 21000000 * COINS) are directly from the Bitcoin protocol.
  */
 
-const COINS: i64 = 100000000; // whole coins
+pub const COINS: i64 = 100000000; // whole coins
 const MAX_MONEY: i64 = 21000000 * COINS;
 
 pub fn is_valid_amount(value: &i64) -> {

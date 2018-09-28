@@ -1,5 +1,8 @@
 use uint::U256;
 use primitives::transaction::Transaction;
+use std::hash::{Hash, Hasher};
+use std::collections::hash_map::DefaultHasher;
+
 
 /** 
  * Nodes collect new transactions into a block, hash them into a hash tree,
@@ -39,7 +42,7 @@ impl BlockHeader {
 }
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Hash)]
 pub struct Block {
     pub header: BlockHeader,
     transactions: Vec<&Transaction>,
@@ -53,6 +56,13 @@ impl Block {
             transactions: Vec::new(),
             checked: false
         }
+    }
+
+    fn get_hash(&self) -> u64 {
+        let mut s = DefaultHasher::new();
+        self.hash(&mut s);
+
+        s.finish()
     }
 }
 
