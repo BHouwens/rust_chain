@@ -1,4 +1,5 @@
 use uint::U256;
+use primitives::transaction::Transaction;
 
 /** 
  * Nodes collect new transactions into a block, hash them into a hash tree,
@@ -41,7 +42,7 @@ impl BlockHeader {
 #[derive(Clone, Debug)]
 pub struct Block {
     pub header: BlockHeader,
-    transactions: Vec<TransactionRef>, // need to make transaction prims
+    transactions: Vec<&Transaction>,
     checked: bool // memory only
 }
 
