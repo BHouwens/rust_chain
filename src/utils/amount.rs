@@ -22,6 +22,6 @@
 pub const COINS: i64 = 100000000; // whole coins
 const MAX_MONEY: i64 = 21000000 * COINS;
 
-pub fn is_valid_amount(value: &i64) -> {
-    value >= 0 && value <= MAX_MONEY
+pub fn is_valid_amount(value: &i64) -> bool {
+    value >= &0 && value <= &MAX_MONEY
 }

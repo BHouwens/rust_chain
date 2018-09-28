@@ -5,3 +5,4 @@ authors = ["byron <zhion360@gmail.com>"]
 
 [dependencies]
 uint = "0.4.1"
+sha2 = "0.7.1"

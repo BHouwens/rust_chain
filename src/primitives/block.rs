@@ -1,7 +1,4 @@
-use uint::U256;
 use primitives::transaction::Transaction;
-use std::hash::{Hash, Hasher};
-use std::collections::hash_map::DefaultHasher;
 
 
 /** 
@@ -16,12 +13,12 @@ use std::collections::hash_map::DefaultHasher;
 
 #[derive(Clone, Debug)]
 pub struct BlockHeader {
-    version: i32,
-    previous_hash: U256,
-    merkle_root_hash: U256,
-    time: u32,
-    bits: u32,
-    nonce: u32
+    pub version: i32,
+    pub previous_hash: U256,
+    pub merkle_root_hash: U256,
+    pub time: u32,
+    pub bits: i32,
+    pub nonce: u32
 }
 
 impl BlockHeader {
@@ -42,27 +39,20 @@ impl BlockHeader {
 }
 
 
-#[derive(Clone, Debug, Hash)]
+#[derive(Clone, Debug)]
 pub struct Block {
     pub header: BlockHeader,
-    transactions: Vec<&Transaction>,
+    pub transactions: Vec<Transaction>,
     checked: bool // memory only
 }
 
 impl Block {
-    fn new() -> Block {
+    pub fn new() -> Block {
         Block {
             header: BlockHeader::new(),
             transactions: Vec::new(),
             checked: false
         }
-    }
-
-    fn get_hash(&self) -> u64 {
-        let mut s = DefaultHasher::new();
-        self.hash(&mut s);
-
-        s.finish()
     }
 }
 

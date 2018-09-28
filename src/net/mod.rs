@@ -4,8 +4,8 @@ pub mod address;
 pub mod validation;
 pub mod node;
 
-use node::Peer;
-use address;
+use net::node::Peer;
+use net::address;
 
 
 /*---- Constants ----*/
@@ -13,17 +13,11 @@ use address;
 const LISTEN: bool = true;
 
 
-
 /*---- Functions ----*/
 
-/**
- * Pushes our address to a peer
- * 
- * `peer` - Peer to send to
- */
 
-pub fn advertise_local(peer: &Peer) {
-    if LISTEN && peer.successfullyConnected {
-        local_address_set = address::AddressSet("127.0.01", )
-    }
-}
+// pub fn advertise_local(peer: &Peer) {
+//     if LISTEN && peer.successfullyConnected {
+//         local_address_set = address::AddressSet("127.0.01", )
+//     }
+// }

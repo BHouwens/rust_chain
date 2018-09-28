@@ -31,12 +31,12 @@ impl OutPoint {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TxIn {
     pub previous_out: Option<OutPoint>,
-    pub sequence: u32
+    pub sequence: u32,
     pub script_signature: Option<String>
 }
 
 impl TxIn {
-    fn new() -> TxIn {
+    pub fn new() -> TxIn {
         TxIn {
             previous_out: None,
             sequence: 0,
@@ -53,12 +53,12 @@ impl TxIn {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TxOut {
-    value: u64, // amount in satoshis (original bitcoin)
-    public_key: Option<String>
+    pub value: i64, // amount in satoshis (original bitcoin)
+    pub public_key: Option<String>
 }
 
 impl TxOut {
-    fn new() -> TxOut {
+    pub fn new() -> TxOut {
         TxOut {
             value: 0,
             public_key: None
@@ -81,7 +81,7 @@ pub struct Transaction {
 }
 
 impl Transaction {
-    fn new() -> Transaction {
+    pub fn new() -> Transaction {
         Transaction {
             inputs: Vec::new(),
             outputs: Vec::new(),
@@ -97,16 +97,16 @@ impl Transaction {
     fn get_output_value(&self) -> u64 {
         let mut total_value: i64 = 0;
 
-        for &txout in self.outputs {
+        for txout in self.outputs {
             signed_value = txout.value.parse::<i64>().unwrap();
 
-            if !is_valid_amount(signed_value) {
+            if !is_valid_amount(&signed_value) {
                 panic!("TxOut value {value} out of range", value = signed_value);
             }
 
             total_value += signed_value;
 
-            if !is_valid_amount(total_value) {
+            if !is_valid_amount(&total_value) {
                 panic!("Total TxOut value of {value} out of range", value = total_value);
             }
         }

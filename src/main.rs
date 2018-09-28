@@ -1,4 +1,5 @@
 extern crate uint;
+extern crate sha2;
 
 pub mod config;
 pub mod net;

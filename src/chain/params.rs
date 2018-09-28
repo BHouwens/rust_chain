@@ -1,10 +1,9 @@
-use std::collections::HashMap;
+use utils::amount::COINS;
 use primitives::block::Block;
 use net::address::AddressSet;
+use std::collections::HashMap;
 use consensus::params::ConsensusParams;
 use primitives::transaction::{ Transaction, TxIn, TxOut };
-use serialize::ToHex;
-use utils::amount::COINS;
 
 
 enum Base58Type {
@@ -58,10 +57,9 @@ pub struct ChainParams {
     mine_blocks_on_demand: bool,
     fallback_fee_enabled: bool,
     chain_tx_data: ChainTxData,
-    message_start: String, // CMessageHeader::MessageStartChars pchMessageStart
     fixed_seeds: Vec<AddressSet>,
     checkpoint_data: HashMap<u8, String>,
-    message_start: Vec<u8> 
+    message_start: Vec<u8> // possibly String?
 }
 
 
@@ -134,7 +132,7 @@ fn get_main_params() -> ChainParams {
 
     // Handle genesis
     let genesis = create_genesis_block(1231006505, 2083236893, String::from(""), 1, 50 * COINS, 486604799);
-    consensus.genesis_block_hash = genesis.get_hash();
+    consensus.genesis_block_hash = genesis.get_hash().to_string();
 
     // Checkpoint data
     let mut checkpoint_data = HashMap::new();
