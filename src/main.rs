@@ -2,6 +2,8 @@ extern crate uint;
 extern crate sha3;
 extern crate blake2;
 extern crate tiny_keccak;
+extern crate digest;
+extern crate sodiumoxide;
 
 pub mod config;
 pub mod net;

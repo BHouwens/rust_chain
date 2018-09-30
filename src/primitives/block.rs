@@ -61,10 +61,6 @@ impl Block {
     }
 }
 
-impl Hash for Block {
-    fn hash<H: Hasher>()
-}
-
 
 
 /** 
