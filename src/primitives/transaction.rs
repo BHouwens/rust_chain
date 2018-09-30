@@ -1,4 +1,3 @@
-use uint::U256;
 use primitives::SEQUENCE_FINAL;
 use utils::amount::is_valid_amount;
 
@@ -8,12 +7,14 @@ use utils::amount::is_valid_amount;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OutPoint {
-    pub hash: U256,
+    pub hash: Vec<u8>,
     pub n: i32
 }
 
+// Hashes are currently Vec<u8> until a better solution comes along
+
 impl OutPoint {
-    fn new(hash: U256, n: i32) -> OutPoint {
+    fn new(hash: Vec<u8>, n: i32) -> OutPoint {
         OutPoint {
             hash: hash,
             n: n
@@ -54,14 +55,14 @@ impl TxIn {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TxOut {
     pub value: i64, // amount in satoshis (original bitcoin)
-    pub public_key: Option<String>
+    pub script_public_key: Option<String>
 }
 
 impl TxOut {
     pub fn new() -> TxOut {
         TxOut {
             value: 0,
-            public_key: None
+            script_public_key: None
         }
     }
 }
@@ -94,24 +95,22 @@ impl Transaction {
      * Return sum of txouts
      */
 
-    fn get_output_value(&self) -> u64 {
+    fn get_output_value(&self) -> i64 {
         let mut total_value: i64 = 0;
 
         for txout in self.outputs {
-            signed_value = txout.value.parse::<i64>().unwrap();
-
-            if !is_valid_amount(&signed_value) {
-                panic!("TxOut value {value} out of range", value = signed_value);
+            if !is_valid_amount(&txout.value) {
+                panic!("TxOut value {value} out of range", value = txout.value);
             }
 
-            total_value += signed_value;
+            total_value += txout.value;
 
             if !is_valid_amount(&total_value) {
                 panic!("Total TxOut value of {value} out of range", value = total_value);
             }
         }
 
-        total_value.parse::<u64>().unwrap()
+        total_value
     }
 
     /**

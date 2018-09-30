@@ -5,4 +5,6 @@ authors = ["byron <zhion360@gmail.com>"]
 
 [dependencies]
 uint = "0.4.1"
-sha2 = "0.7.1"
+sha3 = "0.7.3"
+blake2 = "0.7.1"
+tiny-keccak = "1.4.2"

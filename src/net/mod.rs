@@ -4,9 +4,6 @@ pub mod address;
 pub mod validation;
 pub mod node;
 
-use net::node::Peer;
-use net::address;
-
 
 /*---- Constants ----*/
 

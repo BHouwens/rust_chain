@@ -1,13 +1,15 @@
+use uint::U256;
+
 /**
  * Parameters that influence chain consensus.
  */
 
 pub struct ConsensusParams {
-    pub genesis_block_hash: String,
+    pub genesis_block_hash: Vec<u8>,
     pub subsidy_halving_interval: u8,
-    pub bip16_exception: String,          // Block hash that is excepted from BIP16 enforcement
+    pub bip16_exception: U256,   // Block hash that is excepted from BIP16 enforcement
     pub bip34_height: u64,                // Block height and hash at which BIP34 becomes active
-    pub bip34_hash: String,
+    pub bip34_hash: U256,
     pub bip65_height: u64,                // Block height at which BIP65 becomes active
     pub bip66_height: u64,                // Block height at which BIP66 becomes active
 
@@ -17,40 +19,40 @@ pub struct ConsensusParams {
      * Examples: 1916 for 95%, 1512 for testchains.
      */
     pub rule_change_activation_threshold: u32,
-    pub miner_confirmation_window: u32,
+    pub miner_confirmation_window: i64,
     // BIP9Deployment vDeployments[MAX_VERSION_BITS_DEPLOYMENTS];
 
     // PoW Parameters
     // These params tend to be associated with mining difficulty
-    pub pow_limit: String,
+    pub pow_limit: U256,
     pub pow_allow_min_difficulty_blocks: bool,
     pub pow_no_retargeting: bool,
     pub pow_target_spacing: i64,
     pub pow_target_timespan: i64,
-    pub minimum_chain_work: String,
-    pub default_assume_valid: String,
+    pub minimum_chain_work: U256,
+    pub default_assume_valid: U256,
 }
 
 impl ConsensusParams {
     pub fn new() -> ConsensusParams {
         ConsensusParams {
-            genesis_block_hash: String::from(""),
+            genesis_block_hash: Vec::new(),
             subsidy_halving_interval: 0,
-            bip16_exception: String::from(""),
+            bip16_exception: U256::from_dec_str("0").unwrap(),
             bip34_height: 0,      
-            bip34_hash: String::from(""),
+            bip34_hash: U256::from_dec_str("0").unwrap(),
             bip65_height: 0, 
             bip66_height: 0,
             rule_change_activation_threshold: 0,
             miner_confirmation_window: 0,
             // BIP9Deployment vDeployments[MAX_VERSION_BITS_DEPLOYMENTS];
-            pow_limit: String::from(""),
+            pow_limit: U256::from_dec_str("0").unwrap(),
             pow_allow_min_difficulty_blocks: false,
             pow_no_retargeting: false,
             pow_target_spacing: 0,
             pow_target_timespan: 0,
-            minimum_chain_work: String::from(""),
-            default_assume_valid: String::from("")
+            minimum_chain_work: U256::from_dec_str("0").unwrap(),
+            default_assume_valid: U256::from_dec_str("0").unwrap()
         }
     }
 

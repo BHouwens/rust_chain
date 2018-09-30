@@ -1,3 +1,4 @@
+#[derive(Clone, Debug)]
 pub enum ServiceFlag {
     None,           // Nothing
     Network,        // NETWORK means that the node is capable of serving the complete block chain (no pruning)
