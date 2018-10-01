@@ -1,4 +1,3 @@
-use primitives::SEQUENCE_FINAL;
 use utils::amount::is_valid_amount;
 
 /** 

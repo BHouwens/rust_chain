@@ -4,6 +4,8 @@
  */
 
 pub mod amount;
+pub mod compact;
+
 
 /*---- CONSTANTS ----*/
 

@@ -1,4 +1,4 @@
-use uint::U256;
+use ramp::Int;
 
 /**
  * Parameters that influence chain consensus.
@@ -7,9 +7,9 @@ use uint::U256;
 pub struct ConsensusParams {
     pub genesis_block_hash: Vec<u8>,
     pub subsidy_halving_interval: u8,
-    pub bip16_exception: U256,   // Block hash that is excepted from BIP16 enforcement
+    pub bip16_exception: Int,   // Block hash that is excepted from BIP16 enforcement
     pub bip34_height: u64,                // Block height and hash at which BIP34 becomes active
-    pub bip34_hash: U256,
+    pub bip34_hash: Int,
     pub bip65_height: u64,                // Block height at which BIP65 becomes active
     pub bip66_height: u64,                // Block height at which BIP66 becomes active
 
@@ -24,13 +24,13 @@ pub struct ConsensusParams {
 
     // PoW Parameters
     // These params tend to be associated with mining difficulty
-    pub pow_limit: U256,
+    pub pow_limit: Int,
     pub pow_allow_min_difficulty_blocks: bool,
     pub pow_no_retargeting: bool,
     pub pow_target_spacing: i64,
     pub pow_target_timespan: i64,
-    pub minimum_chain_work: U256,
-    pub default_assume_valid: U256,
+    pub minimum_chain_work: Int,
+    pub default_assume_valid: Int,
 }
 
 impl ConsensusParams {
@@ -38,21 +38,21 @@ impl ConsensusParams {
         ConsensusParams {
             genesis_block_hash: Vec::new(),
             subsidy_halving_interval: 0,
-            bip16_exception: U256::from_dec_str("0").unwrap(),
+            bip16_exception: Int::zero(),
             bip34_height: 0,      
-            bip34_hash: U256::from_dec_str("0").unwrap(),
+            bip34_hash: Int::zero(),
             bip65_height: 0, 
             bip66_height: 0,
             rule_change_activation_threshold: 0,
             miner_confirmation_window: 0,
             // BIP9Deployment vDeployments[MAX_VERSION_BITS_DEPLOYMENTS];
-            pow_limit: U256::from_dec_str("0").unwrap(),
+            pow_limit: Int::zero(),
             pow_allow_min_difficulty_blocks: false,
             pow_no_retargeting: false,
             pow_target_spacing: 0,
             pow_target_timespan: 0,
-            minimum_chain_work: U256::from_dec_str("0").unwrap(),
-            default_assume_valid: U256::from_dec_str("0").unwrap()
+            minimum_chain_work: Int::zero(),
+            default_assume_valid: Int::zero()
         }
     }
 

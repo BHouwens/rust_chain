@@ -1,3 +1,4 @@
+use ramp::Int;
 use utils::PSZ_TIMESTAMP;
 use primitives::transaction::Transaction;
 use std::hash::{ Hash, Hasher };
@@ -9,8 +10,6 @@ use std::hash::{ Hash, Hasher };
  * to everyone and the block is added to the block chain.  The first transaction
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
- * 
- * Hashes are represented as Vec<u8> until a better solution comes along
  */
 
 
@@ -18,27 +17,27 @@ use std::hash::{ Hash, Hasher };
 
 #[derive(Clone, Debug)]
 pub struct BlockHeader {
-    pub version: i32,
-    pub previous_hash: Vec<u8>,
-    pub merkle_root_hash: Vec<u8>,
+    pub version: u32,
+    pub previous_hash: Int,
+    pub merkle_root_hash: Int,
     pub time: u32,
-    pub bits: i32,
+    pub bits: u32,
     pub nonce: u32
 }
 
 impl BlockHeader {
-    fn new() -> BlockHeader {
+    pub fn new() -> BlockHeader {
         BlockHeader {
             version: 0,
-            previous_hash: Vec::with_capacity(33),
-            merkle_root_hash: Vec::with_capacity(33),
+            previous_hash: Int::zero(),
+            merkle_root_hash: Int::zero(),
             time: 0,
             bits: 0,
             nonce: 0
         }
     }
 
-    fn is_null(&self) -> bool {
+    pub fn is_null(&self) -> bool {
         self.bits == 0
     }
 }

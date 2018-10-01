@@ -1,4 +1,4 @@
-use uint::U256;
+use ramp::Int;
 use utils::amount::COINS;
 use net::address::AddressSet;
 use std::collections::HashMap;
@@ -59,7 +59,7 @@ pub struct ChainParams {
     fallback_fee_enabled: bool,
     chain_tx_data: ChainTxData,
     fixed_seeds: Vec<AddressSet>,
-    checkpoint_data: HashMap<u8, U256>,
+    checkpoint_data: HashMap<u64, Int>,
     message_start: Vec<u8> // possibly String?
 }
 
@@ -92,13 +92,13 @@ fn get_main_params() -> ChainParams {
 
     // Handle consensus
     consensus.subsidy_halving_interval = 21000;
-    consensus.bip16_exception = U256::from_dec_str("0x00000000000002dc756eebf4f49723ed8d30cc28a5f108eb94b1ba88ac4f9c22").unwrap();
+    consensus.bip16_exception = Int::from_str_radix("00000000000002dc756eebf4f49723ed8d30cc28a5f108eb94b1ba88ac4f9c22", 16).unwrap();
     consensus.bip34_height = 227931;
-    consensus.bip34_hash = U256::from_dec_str("0x000000000000024b89b42a942fe0d9fea3bb44ab7bd1b19115dd6a759c0808b8").unwrap();
+    consensus.bip34_hash = Int::from_str_radix("000000000000024b89b42a942fe0d9fea3bb44ab7bd1b19115dd6a759c0808b8", 16).unwrap();
     consensus.bip65_height = 388381;
     consensus.bip66_height = 363725;
 
-    consensus.pow_limit = U256::from_dec_str("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff").unwrap();
+    consensus.pow_limit = Int::from_str_radix("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16).unwrap();
     consensus.pow_target_timespan = 14 * 24 * 60 * 60;  // two weeks
     consensus.pow_target_spacing = 10 * 60;             // 10 minutes
     consensus.rule_change_activation_threshold = 1916;  // 95% of 2016
@@ -118,10 +118,10 @@ fn get_main_params() -> ChainParams {
     // consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1510704000; // November 15th, 2017.
 
     // The best chain should have at least this much work.
-    consensus.minimum_chain_work = U256::from_dec_str("0x0000000000000000000000000000000000000000028822fef1c230963535a90d").unwrap();
+    consensus.minimum_chain_work = Int::from_str_radix("0000000000000000000000000000000000000000028822fef1c230963535a90d", 16).unwrap();
 
     // By default assume that the signatures in ancestors of this block are valid.
-    consensus.default_assume_valid = U256::from_dec_str("0x0000000000000000002e63058c023a9a1de233554f28c7b21380b6c9003f36a8").unwrap();
+    consensus.default_assume_valid = Int::from_str_radix("0000000000000000002e63058c023a9a1de233554f28c7b21380b6c9003f36a8", 16).unwrap();
 
     // The message start string is designed to be unlikely to occur in normal data.
     // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
@@ -135,10 +135,10 @@ fn get_main_params() -> ChainParams {
 
     // Checkpoint data
     let mut checkpoint_data = HashMap::new();
-    checkpoint_data.insert(11111, U256::from_dec_str("0x0000000069e244f73d78e8fd29ba2fd2ed618bd6fa2ee92559f542fdb26e7c1d").unwrap());
-    checkpoint_data.insert(33333, U256::from_dec_str("0x000000002dd5588a74784eaa7ab0507a18ad16a236e7b1ce69f00d7ddfb5d0a6").unwrap());
-    checkpoint_data.insert(74000, U256::from_dec_str("0x0000000000573993a3c9e41ce34471c079dcf5f52a0e824a81e7f953b8661a20").unwrap());
-    checkpoint_data.insert(105000, U256::from_dec_str("0x00000000000291ce28027faea320c8d2b054b2e0fe44a773f3eefb151d6bdc97").unwrap());
+    checkpoint_data.insert(11111, Int::from_str_radix("0000000069e244f73d78e8fd29ba2fd2ed618bd6fa2ee92559f542fdb26e7c1d", 16).unwrap());
+    checkpoint_data.insert(33333, Int::from_str_radix("000000002dd5588a74784eaa7ab0507a18ad16a236e7b1ce69f00d7ddfb5d0a6", 16).unwrap());
+    checkpoint_data.insert(74000, Int::from_str_radix("0000000000573993a3c9e41ce34471c079dcf5f52a0e824a81e7f953b8661a20", 16).unwrap());
+    checkpoint_data.insert(105000, Int::from_str_radix("00000000000291ce28027faea320c8d2b054b2e0fe44a773f3eefb151d6bdc97", 16).unwrap());
 
     // TX data
     let chain_tx_data = ChainTxData {
