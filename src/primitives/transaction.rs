@@ -60,7 +60,7 @@ pub struct TxOut {
 impl TxOut {
     pub fn new() -> TxOut {
         TxOut {
-            value: 0,
+            value: -1,
             script_public_key: None
         }
     }
