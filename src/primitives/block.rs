@@ -82,7 +82,7 @@ pub struct BlockLocator {
  */
 
 fn create_raw_genesis_block(
-    psz_timestamp: &String,
+    psz_timestamp: &'static str, // this will change
     // genesis_output_script: ??? sort out script struct
     time: &u32,
     nonce: &u32,

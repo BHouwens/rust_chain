@@ -73,7 +73,8 @@ impl ChainParams {
         match network_type {
             "main" => get_main_params(),
             "test" => get_main_params(), // get_test_params()
-            "regression" => get_main_params() // get_regression_params()
+            "regression" => get_main_params(), // get_regression_params()
+            _ => get_main_params()
         }
     }
 }
@@ -129,8 +130,8 @@ fn get_main_params() -> ChainParams {
 
     // Handle genesis
     let genesis = create_genesis_block(1231006505, 2083236893, 0x1d00ffff, 1, 50 * COINS);
-    let genesis_hash = 
-    consensus.genesis_block_hash = genesis_hash;
+    // let genesis_hash = 
+    // consensus.genesis_block_hash = genesis_hash;
 
     // Checkpoint data
     let mut checkpoint_data = HashMap::new();

@@ -95,10 +95,10 @@ impl Transaction {
      * Return sum of txouts
      */
 
-    fn get_output_value(&self) -> i64 {
+    fn get_output_value(&mut self) -> i64 {
         let mut total_value: i64 = 0;
 
-        for txout in self.outputs {
+        for txout in &mut self.outputs {
             if !is_valid_amount(&txout.value) {
                 panic!("TxOut value {value} out of range", value = txout.value);
             }
