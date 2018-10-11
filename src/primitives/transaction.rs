@@ -134,7 +134,5 @@ impl Transaction {
     fn is_coinbase(&self) -> bool {
         self.inputs.len() == 1 && self.inputs[0].previous_out != None
     }
-
-    // include check for witness
 }
 

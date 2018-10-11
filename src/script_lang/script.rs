@@ -36,42 +36,6 @@ impl Script {
                self.stack[2] == StackEntry::Op(OpCodes::OP_EQUAL); 
     }
 
-    /**
-     * Check whether this is pay to witness script hash
-     */
-
-    pub fn is_p2wsh(&self) -> bool {
-        return self.stack.len() == 34 &&
-               self.stack[0] == StackEntry::Op(OpCodes::OP_0) &&
-               self.stack[1].value_at_index_eq(0, 0x20);
-    }
-
-    /**
-     * Check whether this is a witness program script.
-     * 
-     * A witness program is any valid Script that consists of a 1-byte push opcode
-     * followed by a data push between 2 and 40 bytes.
-     */
-
-    pub fn is_witness_program(&self) -> bool {
-
-        // Size bounds
-        if self.stack.len() < 4 || self.stack.len() > 42 {
-            return false;
-        }
-
-        if self.stack[0] != StackEntry::Op(OpCodes::OP_0) &&
-           (self.stack[0] < StackEntry::Op(OpCodes::OP_1) || self.stack[0] > StackEntry::Op(OpCodes::OP_16))
-        {
-            return false;
-        }
-
-        if self.stack.len() > 3 {
-            return true;
-        }
-
-        false
-    }
 
     /**
      * Whether a script consists purely of push-type opcodes
