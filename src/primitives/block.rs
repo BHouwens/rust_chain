@@ -1,13 +1,12 @@
 use ramp::Int;
 use utils::PSZ_TIMESTAMP;
 use primitives::transaction::Transaction;
-use std::hash::{ Hasher };
 
 /** 
  * Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work
- * requirements.  When they solve the proof-of-work, they broadcast the block
- * to everyone and the block is added to the block chain.  The first transaction
+ * requirements. When they solve the proof-of-work, they broadcast the block
+ * to everyone and the block is added to the block chain. The first transaction
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
  */

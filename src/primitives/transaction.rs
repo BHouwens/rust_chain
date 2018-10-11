@@ -99,7 +99,8 @@ impl Transaction {
 
         for txout in &mut self.outputs {
             if txout.value.is_some() {
-                let this_value = txout.value.unwrap(); // we're safe to unwrap here
+                // we're safe to unwrap here
+                let this_value = txout.value.unwrap(); 
 
                 if !is_valid_amount(&this_value) {
                     panic!("TxOut value {value} out of range", value = this_value);

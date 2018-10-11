@@ -1,6 +1,6 @@
 #[derive(Clone, Debug)]
 pub enum ServiceFlag {
-    None,           // Nothing
+    Nothing,        // NOTHING (labelled "None" in original Bitcoin, but that's a reserved keyword in Rust)
     Network,        // NETWORK means that the node is capable of serving the complete block chain (no pruning)
     GetUTXO,        // GETUTXO means the node is capable of responding to the getutxo protocol request.
     Bloom,          // BLOOM means the node is capable and willing to handle bloom-filtered connections.

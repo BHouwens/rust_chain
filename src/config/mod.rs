@@ -70,7 +70,7 @@ pub fn read_config(path: &str) -> Config {
             "rpcsslprivatekeyfile" => { rpc_details.key_file = String::from(value); },
             "keypool" => { config.keypool = value.parse::<u8>().unwrap(); },
             "paytxfee" => { config.pay_tx_fee = value.parse::<f32>().unwrap(); },
-            _ => println!("Property not catered to")
+            _ => println!("Property {property} not catered to", property = property)
         }
     }
 
