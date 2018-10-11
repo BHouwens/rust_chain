@@ -13,6 +13,7 @@ pub mod utils;
 pub mod chain;
 pub mod consensus;
 pub mod cryptography;
+pub mod script_lang;
 
 use ramp::int::Int;
 
