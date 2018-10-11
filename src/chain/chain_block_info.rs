@@ -200,15 +200,46 @@ impl BlockIndex {
 
     // Check validity of blocks up to a passed point (default 3)
     pub fn is_valid_to(&self, up_to: BlockStatus) -> bool {
-        if (
-            (self.status as i32 & BlockStatus::FailedValidity as i32 > 0) ||
-            (self.status as i32 & BlockStatus::FailedChild as i32 > 0)
-        ) {
-            return false;
-        }
-
-        
-
         false
+    }
+}
+
+/**
+ * An in-memory indexed chain of blocks
+ */
+
+pub struct Chain {
+    blocks: Vec<BlockIndex>
+}
+
+impl Chain {
+    pub fn new() -> Chain {
+        Chain {
+            blocks: Vec::new()
+        }
+    }
+
+    // Returns the index entry for the genesis block of this chain, or None.
+    pub fn get_genesis(&self) -> Option<&BlockIndex> {
+        match self.blocks.len() {
+            0 => None,
+            _ => Some(&self.blocks[0])
+        }
+    }
+
+    // Returns the index entry for the tip of this chain, or None.
+    pub fn get_tip(&self) -> Option<&BlockIndex> {
+        match self.blocks.len() {
+            0 => None,
+            n => Some(&self.blocks[n - 1])
+        }
+    }
+
+    // Get block at height
+    pub fn get_at_height(&self, height: usize) -> Option<&BlockIndex> {
+        match self.blocks.len() >= height {
+            true => Some(&self.blocks[height]),
+            false => None
+        }
     }
 }
