@@ -1,7 +1,7 @@
 use ramp::Int;
 use utils::PSZ_TIMESTAMP;
 use primitives::transaction::Transaction;
-use std::hash::{ Hash, Hasher };
+use std::hash::{ Hasher };
 
 /** 
  * Nodes collect new transactions into a block, hash them into a hash tree,
@@ -46,16 +46,14 @@ impl BlockHeader {
 #[derive(Clone, Debug)]
 pub struct Block {
     pub header: BlockHeader,
-    pub transactions: Vec<Transaction>,
-    checked: bool // memory only
+    pub transactions: Vec<Transaction>
 }
 
 impl Block {
     pub fn new() -> Block {
         Block {
             header: BlockHeader::new(),
-            transactions: Vec::new(),
-            checked: false
+            transactions: Vec::new()
         }
     }
 }
@@ -87,7 +85,7 @@ fn create_raw_genesis_block(
     nonce: &u32,
     bits: &u32,
     version: &u32,
-    genesis_reward: &i64
+    genesis_reward: &u64
 ) -> Block 
 {
     // let psz_timestamp = String::from("The Times 03/Jan/2009 Chancellor on brink of second bailout for banks");
@@ -122,7 +120,7 @@ fn create_raw_genesis_block(
  * Creates a final genesis block for inclusion in the chain
  */
 
-pub fn create_genesis_block(time: u32, nonce: u32, bits: u32, version: u32, genesis_reward: i64) -> Block {
+pub fn create_genesis_block(time: u32, nonce: u32, bits: u32, version: u32, genesis_reward: u64) -> Block {
     // Using straight constant in this case, but will need to incorporate some kind of scripting situation
     create_raw_genesis_block(&PSZ_TIMESTAMP, &time, &nonce, &bits, &version, &genesis_reward)
 }

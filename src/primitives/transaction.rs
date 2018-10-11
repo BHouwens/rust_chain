@@ -53,14 +53,14 @@ impl TxIn {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TxOut {
-    pub value: i64, // amount in satoshis (original bitcoin)
+    pub value: Option<u64>, // amount in satoshis (original bitcoin)
     pub script_public_key: Option<String>
 }
 
 impl TxOut {
     pub fn new() -> TxOut {
         TxOut {
-            value: -1,
+            value: None,
             script_public_key: None
         }
     }
@@ -94,18 +94,22 @@ impl Transaction {
      * Return sum of txouts
      */
 
-    fn get_output_value(&mut self) -> i64 {
-        let mut total_value: i64 = 0;
+    fn get_output_value(&mut self) -> u64 {
+        let mut total_value: u64 = 0;
 
         for txout in &mut self.outputs {
-            if !is_valid_amount(&txout.value) {
-                panic!("TxOut value {value} out of range", value = txout.value);
-            }
+            if txout.value.is_some() {
+                let this_value = txout.value.unwrap(); // we're safe to unwrap here
 
-            total_value += txout.value;
+                if !is_valid_amount(&this_value) {
+                    panic!("TxOut value {value} out of range", value = this_value);
+                }
 
-            if !is_valid_amount(&total_value) {
-                panic!("Total TxOut value of {value} out of range", value = total_value);
+                total_value += this_value;
+
+                if !is_valid_amount(&total_value) {
+                    panic!("Total TxOut value of {value} out of range", value = total_value);
+                }
             }
         }
 

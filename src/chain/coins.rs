@@ -83,7 +83,7 @@ impl Coin {
     }
 
     fn is_spent(&self) -> bool {
-        self.out.value == -1
+        self.out.value.is_none()
     }
 }
 
