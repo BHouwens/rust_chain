@@ -4,9 +4,8 @@ use net::address::AddressSet;
 use std::collections::HashMap;
 use consensus::params::ConsensusParams;
 use primitives::block::{ Block, create_genesis_block };
-use primitives::transaction::{ Transaction, TxIn, TxOut };
 
-
+/// Base58 encoding representation
 enum Base58Type {
     pubkey_address,
     script_address,
@@ -19,13 +18,10 @@ enum Base58Type {
 
 /*----- STRUCTS -----*/
 
-/**
- * Holds various statistics on transactions within a chain. Used to estimate
- * verification progress during chain sync.
- *
- * See also: ChainParams::TxData, GuessVerificationProgress. (original Bitcoin)
- */
-
+/// Holds various statistics on transactions within a chain. Used to estimate
+/// verification progress during chain sync.
+///
+/// See also: ChainParams::TxData, GuessVerificationProgress. (original Bitcoin)
 pub struct ChainTxData {
     time: i64,      // UNIX timestamp of last known number of transactions
     tx_count: i64,  // total number of transactions between genesis and that timestamp
@@ -33,17 +29,13 @@ pub struct ChainTxData {
 }
 
 
-/**
- * ChainParams defines various tweakable parameters of a given instance of the
- * Bitcoin system. 
- * 
- * There are three: 
- *      - the main network on which people trade goods and services
- *      - the public test network which gets reset from time to time
- *      - a regression test mode which is intended for private networks only. It has
- *        minimal difficulty to ensure that blocks can be found instantly.
- */
-
+/// ChainParams defines various tweakable parameters of a given instance of the
+/// Bitcoin system. 
+/// 
+/// There are three: 
+///      - the main network on which people trade goods and services
+///      - the public test network which gets reset from time to time
+///      - a regression test mode which is intended for private networks only. It has minimal difficulty to ensure that blocks can be found instantly.
 pub struct ChainParams {
     consensus: ConsensusParams,
     default_port: u32,
@@ -64,16 +56,14 @@ pub struct ChainParams {
 }
 
 
-/**
- * Main network implementation
- */
+/*----- IMPLEMENTATIONS -----*/
 
 impl ChainParams {
     fn new(network_type: &str) -> ChainParams {
         match network_type {
             "main" => get_main_params(),
-            "test" => get_main_params(), // get_test_params()
-            "regression" => get_main_params(), // get_regression_params()
+            "test" => get_main_params(),        // get_test_params()
+            "regression" => get_main_params(),  // get_regression_params()
             _ => get_main_params()
         }
     }
@@ -83,10 +73,7 @@ impl ChainParams {
 /*----- FUNCTIONS ------*/
 
 
-/**
- * Main network params
- */
-
+/// Main network params
 fn get_main_params() -> ChainParams {
     let mut consensus = ConsensusParams::new();
 

@@ -1,23 +1,18 @@
 use ramp::Int;
 
-/**
- * Parameters that influence chain consensus.
- */
-
+/// Parameters that influence chain consensus.
 pub struct ConsensusParams {
     pub genesis_block_hash: Vec<u8>,
     pub subsidy_halving_interval: u8,
     pub bip16_exception: Int,   // Block hash that is excepted from BIP16 enforcement
-    pub bip34_height: u64,                // Block height and hash at which BIP34 becomes active
+    pub bip34_height: u64,      // Block height and hash at which BIP34 becomes active
     pub bip34_hash: Int,
-    pub bip65_height: u64,                // Block height at which BIP65 becomes active
-    pub bip66_height: u64,                // Block height at which BIP66 becomes active
+    pub bip65_height: u64,      // Block height at which BIP65 becomes active
+    pub bip66_height: u64,      // Block height at which BIP66 becomes active
 
-    /**
-     * Minimum blocks including miner confirmation of the total of 2016 blocks in a retargeting period,
-     * (nPowTargetTimespan / nPowTargetSpacing) which is also used for BIP9 deployments.
-     * Examples: 1916 for 95%, 1512 for testchains.
-     */
+    // Minimum blocks including miner confirmation of the total of 2016 blocks in a retargeting period,
+    // (nPowTargetTimespan / nPowTargetSpacing) which is also used for BIP9 deployments.
+    // Examples: 1916 for 95%, 1512 for testchains.
     pub rule_change_activation_threshold: u32,
     pub miner_confirmation_window: i64,
     // BIP9Deployment vDeployments[MAX_VERSION_BITS_DEPLOYMENTS];

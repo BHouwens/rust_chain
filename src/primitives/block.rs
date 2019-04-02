@@ -14,6 +14,7 @@ use primitives::transaction::Transaction;
 
 /*---- STRUCTS ----*/
 
+/// Block header
 #[derive(Clone, Debug)]
 pub struct BlockHeader {
     pub version: u32,
@@ -23,6 +24,24 @@ pub struct BlockHeader {
     pub bits: u32,
     pub nonce: u32
 }
+
+/// Block structure with header and transactions
+#[derive(Clone, Debug)]
+pub struct Block {
+    pub header: BlockHeader,
+    pub transactions: Vec<Transaction>
+}
+
+/// Describes a place in the blockchain to another node such that if the
+/// other node doesn't have the same branch, it can find a recent common trunk.
+/// The further back it is, the further before the fork it may be.
+#[derive(Clone, Debug)]
+pub struct BlockLocator {
+    have: Vec<u8>
+}
+
+
+/*---- IMPLEMENTATIONS ----*/
 
 impl BlockHeader {
     pub fn new() -> BlockHeader {
@@ -41,13 +60,6 @@ impl BlockHeader {
     }
 }
 
-
-#[derive(Clone, Debug)]
-pub struct Block {
-    pub header: BlockHeader,
-    pub transactions: Vec<Transaction>
-}
-
 impl Block {
     pub fn new() -> Block {
         Block {
@@ -55,19 +67,6 @@ impl Block {
             transactions: Vec::new()
         }
     }
-}
-
-
-
-/** 
- * Describes a place in the blockchain to another node such that if the
- * other node doesn't have the same branch, it can find a recent common trunk.
- * The further back it is, the further before the fork it may be.
- */
-
-#[derive(Clone, Debug)]
-pub struct BlockLocator {
-    have: Vec<u8>
 }
 
 
@@ -114,11 +113,7 @@ fn create_raw_genesis_block(
     genesis
 }
 
-
-/**
- * Creates a final genesis block for inclusion in the chain
- */
-
+/// Creates a final genesis block for inclusion in the chain
 pub fn create_genesis_block(time: u32, nonce: u32, bits: u32, version: u32, genesis_reward: u64) -> Block {
     // Using straight constant in this case, but will need to incorporate some kind of scripting situation
     create_raw_genesis_block(&PSZ_TIMESTAMP, &time, &nonce, &bits, &version, &genesis_reward)

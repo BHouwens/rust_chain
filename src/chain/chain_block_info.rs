@@ -7,76 +7,8 @@ use ramp::Int;
 use primitives::block::BlockHeader;
 
 
-/*--- STRUCTS ---*/
+/*---- STRUCTS + ENUMS ----*/
 
-#[derive(Clone, Debug)]
-pub struct BlockFileInfo {
-    blocks: u32,
-    size: u32,
-    undo_size: u8,
-    height_first: u8,
-    height_last: u8,
-    time_first: u64,
-    time_last: u64,
-}
-
-impl BlockFileInfo {
-    pub fn new() -> BlockFileInfo {
-        BlockFileInfo {
-            blocks: 0,
-            size: 0,
-            undo_size: 0,
-            height_first: 0,
-            height_last: 0,
-            time_first: 0,
-            time_last: 0,
-        }
-    }
-
-    pub fn add_block(&mut self, height_in: &u8, time_in: &u64) {
-        if self.blocks == 0 || self.height_first > *height_in {
-            self.height_first = *height_in;
-        }
-
-        if self.blocks == 0 || self.time_first > *time_in {
-            self.time_first = *time_in;
-        }
-
-        if *height_in > self.height_last {
-            self.height_last = *height_in;
-        }
-
-        if *time_in > self.time_last {
-            self.time_last = *time_in;
-        }
-
-        // Increment blocks
-        self.blocks += 1;
-    }
-}
-
-/**
- * Block position in disk
- */
-
-#[derive(Clone, Debug)]
-pub struct DiskBlockPosition {
-    pub position: u8,
-    pub file: i16
-}
-
-impl DiskBlockPosition {
-    pub fn new() -> DiskBlockPosition {
-        DiskBlockPosition {
-            position: 0,
-            file: -1
-        }
-    }
-
-    pub fn is_null(&self) -> bool {
-        self.file == -1
-    }
-}
 
 /**
  * The block chain is a tree shaped structure starting with the genesis block at the root, 
@@ -90,6 +22,8 @@ impl DiskBlockPosition {
  * is a previous_hash (32 bytes) (*BYRON*) -- Consider reworking.
  */
 
+
+/// Status of a current block
 pub enum BlockStatus {
     ValidityUnknown = 0,
     ValidHeader = 1,
@@ -105,6 +39,13 @@ pub enum BlockStatus {
     OptWitness = 128
 }
 
+
+/// An indexed, in-memory version of the chain
+pub struct Chain {
+    blocks: Vec<BlockIndex>
+}
+
+/// Block index struct
 #[derive(Clone, Debug)]
 pub struct BlockIndex {
     pub block_hash: Int,
@@ -128,6 +69,86 @@ pub struct BlockIndex {
     pub bits: u32,
     pub nonce: u32
 }
+
+/// Info related to a block file
+#[derive(Clone, Debug)]
+pub struct BlockFileInfo {
+    blocks: u32,
+    size: u32,
+    undo_size: u8,
+    height_first: u8,
+    height_last: u8,
+    time_first: u64,
+    time_last: u64,
+}
+
+/// Block position in disk
+#[derive(Clone, Debug)]
+pub struct DiskBlockPosition {
+    pub position: u8,
+    pub file: i16
+}
+
+
+/*---- IMPLEMENTATIONS ----*/
+
+impl BlockFileInfo {
+
+    /// Generates a blank instance of the BlockFileInfo struct
+    pub fn new() -> BlockFileInfo {
+        BlockFileInfo {
+            blocks: 0,
+            size: 0,
+            undo_size: 0,
+            height_first: 0,
+            height_last: 0,
+            time_first: 0,
+            time_last: 0,
+        }
+    }
+
+    /// Add info about a new block
+    /// 
+    /// ### Arguments
+    /// 
+    /// * `height_in`   - Height in the chain
+    /// * `time_in`     - Time in the chain
+    pub fn add_block(&mut self, height_in: &u8, time_in: &u64) {
+        if self.blocks == 0 || self.height_first > *height_in {
+            self.height_first = *height_in;
+        }
+
+        if self.blocks == 0 || self.time_first > *time_in {
+            self.time_first = *time_in;
+        }
+
+        if *height_in > self.height_last {
+            self.height_last = *height_in;
+        }
+
+        if *time_in > self.time_last {
+            self.time_last = *time_in;
+        }
+
+        // Increment blocks
+        self.blocks += 1;
+    }
+}
+
+
+impl DiskBlockPosition {
+    pub fn new() -> DiskBlockPosition {
+        DiskBlockPosition {
+            position: 0,
+            file: -1
+        }
+    }
+
+    pub fn is_null(&self) -> bool {
+        self.file == -1
+    }
+}
+
 
 impl BlockIndex {
     pub fn new() -> BlockIndex {
@@ -155,7 +176,11 @@ impl BlockIndex {
         }
     }
 
-    // Build from an existing block header
+    /// Build from an existing block header
+    /// 
+    /// ### Arguments
+    /// 
+    /// * `header`  - Block header
     pub fn new_from_header(header: &BlockHeader) -> BlockIndex {
         let mut block_index = BlockIndex::new();
 
@@ -168,7 +193,7 @@ impl BlockIndex {
         block_index
     }
 
-    // Get undo position
+    /// Get undo position
     pub fn get_undo_position(&self) -> DiskBlockPosition {
         let mut undo_pos = DiskBlockPosition::new();
 
@@ -180,7 +205,7 @@ impl BlockIndex {
         undo_pos
     }
 
-    // Get internal "block header"
+    /// Get internal "block header"
     pub fn get_block_header(&self) -> BlockHeader {
         let mut block_header = BlockHeader::new();
 
@@ -197,19 +222,6 @@ impl BlockIndex {
 
         block_header
     }
-
-    // Check validity of blocks up to a passed point (default 3)
-    pub fn is_valid_to(&self, up_to: BlockStatus) -> bool {
-        false
-    }
-}
-
-/**
- * An in-memory indexed chain of blocks
- */
-
-pub struct Chain {
-    blocks: Vec<BlockIndex>
 }
 
 impl Chain {
@@ -219,7 +231,7 @@ impl Chain {
         }
     }
 
-    // Returns the index entry for the genesis block of this chain, or None.
+    /// Returns the index entry for the genesis block of this chain, or None.
     pub fn get_genesis(&self) -> Option<&BlockIndex> {
         match self.blocks.len() {
             0 => None,
@@ -227,7 +239,7 @@ impl Chain {
         }
     }
 
-    // Returns the index entry for the tip of this chain, or None.
+    /// Returns the index entry for the tip of this chain, or None.
     pub fn get_tip(&self) -> Option<&BlockIndex> {
         match self.blocks.len() {
             0 => None,
@@ -235,7 +247,11 @@ impl Chain {
         }
     }
 
-    // Get block at height
+    /// Get block at height
+    /// 
+    /// ### Arguments
+    /// 
+    /// * `height`  - Height to get block at
     pub fn get_at_height(&self, height: usize) -> Option<&BlockIndex> {
         match self.blocks.len() >= height {
             true => Some(&self.blocks[height]),

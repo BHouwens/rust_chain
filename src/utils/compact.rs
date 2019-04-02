@@ -14,17 +14,21 @@
  * and  0xc0de000000 is compact (0x0600c0de)
  *
  * Bitcoin only uses this "compact" format for encoding difficulty
- * targets, which are unsigned 256bit quantities.  Thus, all the
+ * targets, which are unsigned 256bit quantities. Thus, all the
  * complexities of the sign bit and using base 256 are probably an
  * implementation accident.
  */
 
 use ramp::Int;
 
-/**
- * Creates a "compact" format version of a Int.
- */
 
+/// Creates a "compact" format version of a Int.
+/// 
+/// ### Arguments
+/// 
+/// * `bits`        - Bit size
+/// * `negative`    - Whether the resulting value is negative
+/// * `overflow`    - Whether the resulting value is compact
 pub fn set_compact(bits: &u32, negative: &mut bool, overflow: &mut bool) -> Int {
     let size = bits >> 24;
     let mut word = bits & 0x007fffff;

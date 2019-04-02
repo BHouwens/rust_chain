@@ -22,6 +22,13 @@
 pub const COINS: u64 = 100000000; // whole coins
 const MAX_MONEY: u64 = 21000000 * COINS;
 
+
+/// Checks whether the passed number of satoshis is valid
+/// given the system parameters
+/// 
+/// ### Arguments
+/// 
+/// * `value`   - Value to check
 pub fn is_valid_amount(value: &u64) -> bool {
     value >= &0 && value <= &MAX_MONEY
 }

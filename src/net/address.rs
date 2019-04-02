@@ -1,3 +1,4 @@
+/// Flags for services available from peer
 #[derive(Clone, Debug)]
 pub enum ServiceFlag {
     Nothing,        // NOTHING (labelled "None" in original Bitcoin, but that's a reserved keyword in Rust)
@@ -9,12 +10,23 @@ pub enum ServiceFlag {
     NetworkLimited  // NETWORK_LIMITED means the same as NETWORK with the limitation of only serving the last 288 (2 day) blocks
 }
 
-/* Equivalent to Bitcon's CService  */
+/// Equivalent to Bitcon's CService
 #[derive(Clone, Debug)]
 pub struct AddressSet {
     address: String,
     port: u64
 }
+
+/// Equivalent to Bitcon's CAddress
+#[derive(Clone, Debug)]
+pub struct AddressAsPeer {
+    address: AddressSet,
+    time: u64,
+    services: ServiceFlag
+}
+
+
+/*---- IMPLEMENTATIONS ----*/
 
 impl AddressSet {
     fn new(address: String, port: u64) -> AddressSet {
@@ -23,14 +35,6 @@ impl AddressSet {
             port: port
         }
     }
-}
-
-/* Equivalent to Bitcon's CAddress  */
-#[derive(Clone, Debug)]
-pub struct AddressAsPeer {
-    address: AddressSet,
-    time: u64,
-    services: ServiceFlag
 }
 
 impl AddressAsPeer {

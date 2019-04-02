@@ -18,29 +18,26 @@ const SALT_2: [u8; 4] = [4,5,6,7];
 
 /*---- TRAITS ----*/
 
-/**
- * Abstract view of the open txout dataset
- * 
- * Equivalent to Bitcoin's CCoinsView
- */
-
+/// Abstract view of the open txout dataset
+///  
+/// Equivalent to Bitcoin's CCoinsView
 trait CoinSet {
 
-    // Retrieve the Coin (unspent transaction output) for a given outpoint.
-    // Returns true only when an unspent coin was found, which is returned in coin.
-    // When false is returned, coin's value is unspecified.
+    /// Retrieve the Coin (unspent transaction output) for a given outpoint.
+    /// Returns true only when an unspent coin was found, which is returned in coin.
+    /// When false is returned, coin's value is unspecified.
     fn get_coin(outpoint: &OutPoint, coin: &Coin) -> bool;
 
-    // Just check whether a given outpoint is unspent.
+    /// Just check whether a given outpoint is unspent.
     fn have_coin(outpoint: &OutPoint) -> bool;
 
-    // Retrieve the block hash whose state this CoinSet currently represents
+    /// Retrieve the block hash whose state this CoinSet currently represents
     fn get_best_block() -> Int;
 
-    // Retrieve the range of blocks that may have been only partially written.
-    // If the database is in a consistent state, the result is the empty vector.
-    // Otherwise, a two-element vector is returned consisting of the new and
-    // the old block hash, in that order.
+    /// Retrieve the range of blocks that may have been only partially written.
+    /// If the database is in a consistent state, the result is the empty vector.
+    /// Otherwise, a two-element vector is returned consisting of the new and
+    /// the old block hash, in that order.
     fn get_head_blocks() -> Vec<Int>;
 
     // BATCH WRITE
@@ -51,19 +48,25 @@ trait CoinSet {
 /*---- STRUCTS ----*/
 
 
-/**
- * A UTXO entry.
- *
- * Serialized format:
- * - VARINT((coinbase ? 1 : 0) | (height << 1))
- * - the non-spent CTxOut (via CTxOutCompressor)
- */
-
+/// A UTXO entry.
+///
+/// Serialized format:
+/// - VARINT((coinbase ? 1 : 0) | (height << 1))
+/// - the non-spent CTxOut (via CTxOutCompressor)
 pub struct Coin {
     pub out: TxOut,         // unspent tx output
     pub is_coinbase: bool,  // whether containing transaction was coinbase
     pub height: u64         // at which height this containing tx was included in the active block chain
 }
+
+/// Equivalent of Bitcoin's CCoinsViewCache
+pub struct CoinSetCache {
+    block_hash: Int,
+    coins_cache: HashMap<String, Coin>
+}
+
+
+/*---- IMPLEMENTATIONS ----*/
 
 impl Coin {
     fn new() -> Coin {
@@ -85,16 +88,6 @@ impl Coin {
     fn is_spent(&self) -> bool {
         self.out.value.is_none()
     }
-}
-
-
-/**
- * Equivalent of Bitcoin's CCoinsViewCache
- */
-
-pub struct CoinSetCache {
-    block_hash: Int,
-    coins_cache: HashMap<String, Coin>
 }
 
 impl CoinSetCache {

@@ -1,34 +1,62 @@
 use std::fmt;
-use ramp::Int;
+
+/*---- CONSTANTS ----*/
+
+/// Maximum number of bytes pushable to the stack
+const MAX_SCRIPT_ELEMENT_SIZE: u16 = 520;
+
+/// Maximum number of non-push operations per script
+const MAX_OPS_PER_SCRIPT: u8 = 201;
+
+/// Maximum number of public keys per multisig
+const MAX_PUB_KEYS_PER_MULTISIG: u8 = 20;
+
+/// Maximum script length in bytes
+const MAX_SCRIPT_SIZE: u16 = 10000;
+
+/// Maximum number of values on script interpreter stack
+const MAX_STACK_SIZE: u16 = 1000;
+
+/// Threshold for lock_time: below this value it is interpreted as block number,
+/// otherwise as UNIX timestamp.
+const LOCKTIME_THRESHOLD: u32 = 500000000; // Tue Nov 5 00:53:20 1985 UTC
+
+/// Maximum value that an opcode can be
+const MAX_OPCODE: u8 = OpCodes::OP_NOP10 as u8;
 
 
-/*---- STRUCTS ----*/
+/*---- STRUCTS + ENUMS ----*/
 
-/**
- * Script is implemented as a struct with a "stack" property, 
- * but it might be better to use a tuple struct here in future. Check back.
- * 
- * Bitcoin keeps track of this stack as a const_iterator (for ref):
- * https://github.com/bitcoin/bitcoin/blob/master/src/script/script.h
- */
-
+/// Script is implemented as a struct with a "stack" property, 
+/// but it might be better to use a tuple struct here in future. Check back.
+/// 
+/// Bitcoin keeps track of this stack as a const_iterator (for ref):
+/// https://github.com/bitcoin/bitcoin/blob/master/src/script/script.h
 #[derive(Clone, Debug)]
 pub struct Script {
     stack: Vec<StackEntry>
 }
 
+/// Stack of operations to perform in a script
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd)]
+enum StackEntry {
+    Op(OpCodes),
+    Hash(Vec<u8>)
+}
+
+
+/*---- IMPLEMENTATIONS ----*/
+
 impl Script {
+
+    /// Returns a new script as a stack to be processed
     pub fn new() -> Script {
         Script {
             stack: Vec::new()
         }
     }
 
-
-    /**
-     * Check whether this is pay to script hash
-     */
-
+    /// Check whether this is pay to script hash
     pub fn is_p2sh(&self) -> bool {
         return self.stack.len() == 23 &&
                self.stack[0] == StackEntry::Op(OpCodes::OP_HASH160) &&
@@ -36,11 +64,7 @@ impl Script {
                self.stack[2] == StackEntry::Op(OpCodes::OP_EQUAL); 
     }
 
-
-    /**
-     * Whether a script consists purely of push-type opcodes
-     */
-
+    /// Whether a script consists purely of push-type opcodes
     pub fn is_push_only(&self) -> bool {
         for entry in &self.stack {
             if entry.is_a_hash() {
@@ -59,62 +83,21 @@ impl Script {
         true
     }
 
-    pub fn has_valid_ops(&self) -> bool {
-        for entry in &self.stack {
-
-        }
-
-        true
-    }
-
-    /**
-     * Gets the op_code for a specific data entry, if it exists
-     */
-
+    /// Gets the op_code for a specific data entry, if it exists
+    /// 
+    /// ### Arguments
+    /// 
+    /// * `entry` - Entry to get the op_code for
     pub fn get_op_code(&self, entry: &u8) -> Option<u8> {
         let mut op_code = OpCodes::OP_INVALIDOPCODE as u8;
 
-
-
         Some(op_code)
     }
-}
 
-/*---- CONSTANTS ----*/
-
-// Maximum number of bytes pushable to the stack
-const MAX_SCRIPT_ELEMENT_SIZE: u16 = 520;
-
-// Maximum number of non-push operations per script
-const MAX_OPS_PER_SCRIPT: u8 = 201;
-
-// Maximum number of public keys per multisig
-const MAX_PUB_KEYS_PER_MULTISIG: u8 = 20;
-
-// Maximum script length in bytes
-const MAX_SCRIPT_SIZE: u16 = 10000;
-
-// Maximum number of values on script interpreter stack
-const MAX_STACK_SIZE: u16 = 1000;
-
-// Threshold for lock_time: below this value it is interpreted as block number,
-// otherwise as UNIX timestamp.
-const LOCKTIME_THRESHOLD: u32 = 500000000; // Tue Nov 5 00:53:20 1985 UTC
-
-// Maximum value that an opcode can be
-const MAX_OPCODE: u8 = OpCodes::OP_NOP10 as u8;
-
-
-/*---- ENUMS ----*/
-
-
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd)]
-enum StackEntry {
-    Op(OpCodes),
-    Hash(Vec<u8>)
 }
 
 impl StackEntry {
+    /// Checks whether the current stack entry is a hash
     pub fn is_a_hash(&self) -> bool {
         match self {
             StackEntry::Hash(_) => true,
@@ -122,6 +105,7 @@ impl StackEntry {
         }
     }
 
+    /// Checks whether the current stack entry is an operation
     pub fn is_an_op(&self) -> bool {
         match self {
             StackEntry::Op(_) => true,
@@ -129,6 +113,12 @@ impl StackEntry {
         }
     }
 
+    /// Checks whether the stack entry at the given index is the given value
+    /// 
+    /// ### Arguments
+    /// 
+    /// * `index`   - Index to check
+    /// * `value`   - Value to check for
     pub fn value_at_index_eq(&self, index: usize, value: u8) -> bool {
         match self {
             StackEntry::Hash(v) => v[index] == value,
@@ -137,6 +127,8 @@ impl StackEntry {
     }
 }
 
+
+/*---- OP CODES ----*/
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd)]
 enum OpCodes {

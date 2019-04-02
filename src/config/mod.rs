@@ -3,8 +3,80 @@ use std::path::Path;
 use std::io::{ BufRead, BufReader };
 
 
-// ---- FUNCTIONS ---- //
+/*---- STRUCTS ---- */
 
+/// Verification struc
+#[derive(Clone, Debug)]
+pub struct RPCDetails {
+    ciphers: String,
+    cert_file: String,
+    key_file: String
+}
+
+#[derive(Clone, Debug)]
+pub struct Config {
+    testnet: bool,
+    proxy: Option<String>,
+    general_neighbours: Vec<String>,
+    specific_neighbours: Vec<String>,
+    max_connections: u8,
+    accept_json_rpc: bool,
+    rpc_user: Option<String>,
+    rpc_password: Option<String>,
+    rpc_timeout: u8,
+    rpc_allowed_ips: Option<Vec<String>>,
+    rpc_port: String,
+    rpc_ssl: bool,
+    rpc_details: Option<RPCDetails>,
+    keypool: u8,
+    pay_tx_fee: f32,
+    allow_receive_by_ip: bool
+}
+
+
+/*---- IMPLEMENTATIONS ----*/
+
+impl RPCDetails {
+    fn new() -> RPCDetails {
+        RPCDetails {
+            ciphers: String::from(""),
+            cert_file: String::from(""),
+            key_file: String::from("")
+        }
+    }
+}
+
+impl Config {
+    fn new() -> Config {
+        Config {
+            testnet: false,
+            proxy: None,
+            general_neighbours: Vec::new(),
+            specific_neighbours: Vec::new(),
+            max_connections: 0,
+            accept_json_rpc: true,
+            rpc_user: None,
+            rpc_password: None,
+            rpc_timeout: 0,
+            rpc_allowed_ips: None,
+            rpc_port: String::from(""),
+            rpc_ssl: false,
+            rpc_details: None,
+            keypool: 0,
+            pay_tx_fee: 0.00,
+            allow_receive_by_ip: false
+        }
+    }
+}
+
+
+/*---- FUNCTIONS ----*/
+
+/// Reads in a chain config file
+/// 
+/// ### Arguments
+/// 
+/// * `path`    - Path to config file
 pub fn read_config(path: &str) -> Config {
     let path = Path::new(path);
     let file = File::open(path).expect("Config file not found");
@@ -82,67 +154,4 @@ pub fn read_config(path: &str) -> Config {
     }
     
     config
-}
-
-
-// ---- STRUCTS ---- //
-
-#[derive(Clone, Debug)]
-pub struct RPCDetails {
-    ciphers: String,
-    cert_file: String,
-    key_file: String
-}
-
-impl RPCDetails {
-    fn new() -> RPCDetails {
-        RPCDetails {
-            ciphers: String::from(""),
-            cert_file: String::from(""),
-            key_file: String::from("")
-        }
-    }
-}
-
-#[derive(Clone, Debug)]
-pub struct Config {
-    testnet: bool,
-    proxy: Option<String>,
-    general_neighbours: Vec<String>,
-    specific_neighbours: Vec<String>,
-    max_connections: u8,
-    accept_json_rpc: bool,
-    rpc_user: Option<String>,
-    rpc_password: Option<String>,
-    rpc_timeout: u8,
-    rpc_allowed_ips: Option<Vec<String>>,
-    rpc_port: String,
-    rpc_ssl: bool,
-    rpc_details: Option<RPCDetails>,
-    keypool: u8,
-    pay_tx_fee: f32,
-    allow_receive_by_ip: bool
-}
-
-impl Config {
-    fn new() -> Config {
-        Config {
-            testnet: false,
-            proxy: None,
-            general_neighbours: Vec::new(),
-            specific_neighbours: Vec::new(),
-            max_connections: 0,
-            accept_json_rpc: true,
-            rpc_user: None,
-            rpc_password: None,
-            rpc_timeout: 0,
-            rpc_allowed_ips: None,
-            rpc_port: String::from(""),
-            rpc_ssl: false,
-            rpc_details: None,
-            keypool: 0,
-            pay_tx_fee: 0.00,
-            allow_receive_by_ip: false
-        }
-    }
 }

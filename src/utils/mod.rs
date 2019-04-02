@@ -9,8 +9,5 @@ pub mod compact;
 
 /*---- CONSTANTS ----*/
 
-/**
- * Timestamp phrase to prove time of creation
- */
-
+/// Timestamp phrase to prove time of creation (original Bitcoin)
 pub const PSZ_TIMESTAMP: &'static str = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks";

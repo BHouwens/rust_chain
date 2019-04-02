@@ -1,5 +1,5 @@
 /**
- * Functions that deal with PoW
+ * Functions that deal with PoW. Super incomplete
  */
 
 use ramp::Int;
@@ -10,11 +10,9 @@ use consensus::params::ConsensusParams;
 /*---- FUNCTIONS ----*/
 
 
-/**
- * Check whether a block hash satisfies the proof-of-work 
- * requirement specified by `bits`
- */
-
+///
+/// Check whether a block hash satisfies the proof-of-work 
+/// requirement specified by `bits`
 pub fn check_proof_of_work(hash: &Int, bits: &u32, params: &ConsensusParams) -> bool {
     let mut negative = false;
     let mut overflow = false;

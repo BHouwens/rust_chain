@@ -1,6 +1,6 @@
 use net::address::{ AddressAsPeer, ServiceFlag };
 
-/* Equivalent to Bitcon's CNode  */
+/// Equivalent to Bitcon's CNode
 #[derive(Clone, Debug)]
 pub struct Peer {
     id: u64,

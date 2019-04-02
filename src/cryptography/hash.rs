@@ -19,13 +19,12 @@ pub enum HashAlgorithm {
 }
 
 
-/** 
- * Hash a completely available message
- *
- * `message` - Message to sign
- * `protocol` - Hash protocol to use
- */
-
+/// Hash a completely available message
+/// 
+/// ### Arguments
+///
+/// * `message` - Message to sign
+/// * `protocol` - Hash protocol to use
 pub fn hash_message(message: &[u8]) -> Vec<u8> {
     let result = match HASH_ALGORITHM {
         HashAlgorithm::Blake2b => blake2::Blake2b::digest(message).to_vec(),
